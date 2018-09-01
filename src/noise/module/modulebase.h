@@ -30,6 +30,10 @@
 #include "../exception.h"
 #include "../noisegen.h"
 
+#ifdef LIBNOISE_HAS_MODERN_CPP_CTORS
+#include <type_traits>
+#endif
+
 #ifdef _WIN32
 #  if NOISE_STATIC
 #    define NOISE_EXPORT
@@ -240,6 +244,13 @@ namespace noise
         /// Constructor.
         Module (int sourceModuleCount);
 
+#ifdef LIBNOISE_HAS_MODERN_CPP_CTORS
+        Module(const Module& other);
+
+        Module(Module&& other);
+        Module& operator=(Module&& other);
+#endif
+
         /// Destructor.
         virtual ~Module ();
 
@@ -360,11 +371,12 @@ namespace noise
         /// This restriction is necessary because if this object was copied,
         /// all source modules assigned to this noise module would need to be
         /// copied as well.
+#ifndef LIBNOISE_HAS_MODERN_CPP_CTORS
         const Module& operator= (const Module& m)
         {
           return *this;
         }
-
+#endif
     };
 
     /// @}
