@@ -22,6 +22,8 @@
 
 #include "module/modulebase.h"
 
+#include <algorithm>
+
 using namespace noise::module;
 
 Module::Module (int sourceModuleCount)
@@ -40,7 +42,30 @@ Module::Module (int sourceModuleCount)
   }
 }
 
+#ifdef LIBNOISE_HAS_MODERN_CPP_CTORS
+///*
+Module::Module(const Module& other) : Module(other.GetSourceModuleCount())
+{
+  int other_source_count = other.GetSourceModuleCount();
+  std::copy(other.m_pSourceModule, other.m_pSourceModule + other_source_count, this->m_pSourceModule);
+}
+
+Module::Module(Module&& other)
+    : m_pSourceModule(other.m_pSourceModule)
+{
+  other.m_pSourceModule = NULL;
+}
+
+Module& Module::operator=(Module&& other)
+{
+  m_pSourceModule = other.m_pSourceModule;
+  other.m_pSourceModule = NULL;
+
+  return *this;
+}
+#endif
+
 Module::~Module ()
 {
-  delete[] m_pSourceModule;
+    delete[] m_pSourceModule;
 }
