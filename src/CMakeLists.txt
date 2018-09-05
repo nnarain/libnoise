@@ -50,15 +50,17 @@ IF(BUILD_SHARED_LIBS)
     ELSE()
     add_library( noise SHARED ${libSrcs} )
     ENDIF()
+
+    SET_TARGET_PROPERTIES( noise PROPERTIES LIBNOISE_VERSION ${LIBNOISE_VERSION} )
+    target_compile_definitions( noise PRIVATE NOISE_BUILD_DLL)
+    INSTALL( TARGETS noise DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" )
 ENDIF()
 
 add_library( noise-static STATIC ${libSrcs} )
 
 # this value is set in the root CMakeLists.txt
-SET_TARGET_PROPERTIES( noise PROPERTIES LIBNOISE_VERSION ${LIBNOISE_VERSION} )
 SET_TARGET_PROPERTIES( noise-static PROPERTIES LIBNOISE_VERSION ${LIBNOISE_VERSION} )
 
-target_compile_definitions( noise PRIVATE NOISE_BUILD_DLL)
 target_compile_definitions( noise-static PUBLIC NOISE_STATIC)
 
 # i would like to see more projects using these defaults
@@ -71,7 +73,6 @@ INSTALL( DIRECTORY "${PROJECT_SOURCE_DIR}/src/noise" DESTINATION
   "${CMAKE_INSTALL_PREFIX}/include" )
 
 # install libraries into /lib
-INSTALL( TARGETS noise DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" )
 INSTALL( TARGETS noise-static DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" )
 
 
