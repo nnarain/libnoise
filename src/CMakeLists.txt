@@ -61,8 +61,6 @@ SET_TARGET_PROPERTIES( noise-static PROPERTIES LIBNOISE_VERSION ${LIBNOISE_VERSI
 target_compile_definitions( noise PRIVATE NOISE_BUILD_DLL)
 target_compile_definitions( noise-static PUBLIC NOISE_STATIC)
 
-SET_TARGET_PROPERTIES( noise-static PROPERTIES OUTPUT_NAME "noise" )
-
 # i would like to see more projects using these defaults
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   ADD_DEFINITIONS( "-Wall -ansi -pedantic -O3" )
